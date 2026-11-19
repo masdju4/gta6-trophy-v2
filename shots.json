@@ -1,6 +1,6 @@
 [
-  { "file": "01-checklist-guide.jpg", "path": "/#view=checklist&filter=all&spoilers=off&trophy=the-shootist", "note": "cover: checklist with progress, filters and The Shootist guide + cited sources open", "viewport": { "width": 1280, "height": 800 } },
-  { "file": "02-roadmap.png", "path": "/#view=roadmap&filter=all&spoilers=off", "scroll": 880, "note": "roadmap stage 2 with all three missable flags", "viewport": { "width": 1280, "height": 800 } },
-  { "file": "03-spoiler-guard.png", "path": "/#view=checklist&filter=story&spoilers=on&trophy=vice-city-baby", "note": "spoiler guard on: unearned story trophies masked, grades visible", "viewport": { "width": 1280, "height": 800 } },
-  { "file": "04-missable-guide.jpg", "path": "/#view=checklist&filter=missable&spoilers=off&trophy=hot-together", "note": "missable filter with Hot Together guide and warning banner", "viewport": { "width": 1280, "height": 800 } }
+  { "file": "1-cover.jpg", "path": "/#view=checklist&filter=all&spoilers=off&trophy=break-the-bank", "note": "cover: checklist with saved progress (8/55), filters, and the Break the Bank story guide with its cited source links open", "viewport": { "width": 1280, "height": 800 } },
+  { "file": "2-roadmap.jpg", "path": "/#view=roadmap&filter=all&spoilers=off", "scroll": 880, "note": "platinum roadmap: stage 2 (Chapters 3-4 & the duo's window) with all three MISSABLE flags and per-trophy roadmap notes", "viewport": { "width": 1280, "height": 800 } },
+  { "file": "3-missable.jpg", "path": "/#view=checklist&filter=missable&spoilers=off&trophy=hot-together", "note": "missable filter active: all 6 missable trophies with amber badges, Hot Together guide and warning banner open", "viewport": { "width": 1280, "height": 800 } },
+  { "file": "4-spoiler.jpg", "path": "/#view=checklist&filter=story&spoilers=on&trophy=vice-city-baby", "note": "spoiler guard ON: earned story trophies visible, unearned ones masked as ??? with grades shown, guard note in the detail panel", "viewport": { "width": 1280, "height": 800 } }
 ]
