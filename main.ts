@@ -1,42 +1,65 @@
-// A working gta6-trophy-guide-01 entry (Node 22, standard library only): the guide is this directory's app/ folder,
-// plain static files a browser opens at app/index.html (ES modules, CSS, no build step), offline: it loads nothing
-// over the network, and its trophy list and guides are app/data/trophies.json. The program hands it in: it copies app/
-// and screenshots/ from beside this file to /output and writes /output/dossier.json, the summary the judge reads (your
-// screenshots, the first load's files and bytes, and your source), with the vendored make.fun library. Leave
-// vendor/makefun-frontend.ts as it is: the scorer requires dossier.json to be byte for byte what its own copy writes.
+// main.ts — Leonida Legend submission program (Node 22, standard library only).
+// Hands the entry in: copies app/ and screenshots/ from this repository into the output
+// directory (MAKEFUN_OUTPUT_DIR, default /output) and writes dossier.json as the exact
+// bytes the vendored make.fun library returns. Deterministic: no timestamps, no random
+// values — two runs over the same repository write identical bytes.
 //
-// Only the plumbing, not a winner: a plain checklist of the 55 trophies with a one-line hint each. Write a real guide
-// for every trophy in your own words, a roadmap to the platinum, filters and a spoiler setting in app/, put 3 or 4 PNG
-// or JPEG screenshots of it in screenshots/ (the first by name is the cover; shots.json says which views this
-// starter's were taken of), and run it.
-//
-// Serve it locally with `node serve.ts`, then open http://localhost:8080.
-// Outside the grader's container, MAKEFUN_OUTPUT_DIR stands in for /output:
-//   mkdir -p out && MAKEFUN_OUTPUT_DIR=out node main.ts
+// Run locally:  mkdir -p out && MAKEFUN_OUTPUT_DIR=out node main.ts
+// Try the app:  node serve.ts  →  http://localhost:8080
 
 import { cpSync, existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildDossier } from './vendor/makefun-frontend.ts';
 
-const here = fileURLToPath(new URL('.', import.meta.url));
-const out = process.env.MAKEFUN_OUTPUT_DIR ?? '/output';
+const repoRoot = fileURLToPath(new URL('.', import.meta.url));
+const outputDir = process.env.MAKEFUN_OUTPUT_DIR ?? '/output';
 
-mkdirSync(out, { recursive: true });
-cpSync(join(here, 'app'), join(out, 'app'), { recursive: true });
-mkdirSync(join(out, 'screenshots'), { recursive: true });
-if (existsSync(join(here, 'screenshots'))) cpSync(join(here, 'screenshots'), join(out, 'screenshots'), { recursive: true });
+function fail(message: string): never {
+  console.error(`main.ts: ${message}`);
+  process.exit(1);
+}
 
-// Leonida Legend entry: 55 cited trophy guides, a six-stage platinum roadmap, missable
-// flags, a spoiler guard, hash deep links and localStorage progress with export/import.
-// Sanity-check the guide data before handing it in so a broken trophies.json fails loudly.
-const trophyData = JSON.parse(readFileSync(join(here, 'app/data/trophies.json'), 'utf8'));
-console.log(`leonida-legend: handing in ${trophyData.trophies.length} trophies`);
+// Validate the guide before handing it in: the gate refuses an entry missing its page,
+// and the trophy file must parse and name all 55 official trophies.
+const indexPath = join(repoRoot, 'app', 'index.html');
+const trophiesPath = join(repoRoot, 'app', 'data', 'trophies.json');
+if (!existsSync(indexPath)) fail('app/index.html is missing');
+if (!existsSync(trophiesPath)) fail('app/data/trophies.json is missing');
 
-// The scorer's own caps (reference/gate.json): only text_max_bytes shapes the bytes; the others refuse an entry the
-// scorer would refuse (more than 4 screenshots or one over 256 KiB; more than 993 files and directories in app/ or
-// 48 MiB of app files: app/ counts beside /output's own 1000-entry cap, its screenshots/ and dossier.json).
-writeFileSync(
-  join(out, 'dossier.json'),
-  buildDossier(out, { text_max_bytes: 163840, screenshots: { max: 4, max_bytes: 262144 }, app_max_files: 993, app_max_bytes: 50331648 }),
-);
+let parsed: unknown;
+try {
+  parsed = JSON.parse(readFileSync(trophiesPath, 'utf8'));
+} catch (error) {
+  fail(`app/data/trophies.json does not parse: ${error instanceof Error ? error.message : String(error)}`);
+}
+// The kit's shape is {"trophies":[...]}; a bare array is accepted too.
+const trophyList = Array.isArray(parsed) ? parsed : (parsed as { trophies?: unknown })?.trophies;
+if (!Array.isArray(trophyList)) fail('app/data/trophies.json holds no trophies array');
+if (trophyList.length < 55) fail(`app/data/trophies.json holds ${trophyList.length} trophies, the official list has 55`);
+// The gate also refuses a trophy with no name or a blank guide — catch that here too.
+for (const [index, entry] of trophyList.entries()) {
+  const item = entry as { name?: unknown; guide?: unknown };
+  if (typeof item?.name !== 'string' || !item.name.trim()) fail(`trophy ${index + 1} has no name`);
+  if (typeof item.guide !== 'string' || !item.guide.trim()) fail(`trophy "${item.name}" has a blank guide`);
+}
+
+mkdirSync(outputDir, { recursive: true });
+cpSync(join(repoRoot, 'app'), join(outputDir, 'app'), { recursive: true });
+mkdirSync(join(outputDir, 'screenshots'), { recursive: true });
+if (existsSync(join(repoRoot, 'screenshots'))) {
+  cpSync(join(repoRoot, 'screenshots'), join(outputDir, 'screenshots'), { recursive: true });
+}
+
+// The scorer's own caps: text_max_bytes shapes the judge text; the others refuse what
+// the scorer would refuse (4 screenshots at 256 KiB each, 993 app entries at 48 MiB).
+// buildDossier returns canonical JSON bytes; write them unchanged so the gate's own
+// rebuild matches byte for byte.
+const dossier = buildDossier(outputDir, {
+  text_max_bytes: 163840,
+  screenshots: { max: 4, max_bytes: 262144 },
+  app_max_files: 993,
+  app_max_bytes: 50331648,
+});
+writeFileSync(join(outputDir, 'dossier.json'), dossier);
+console.log(`leonida-legend: handed in ${trophyList.length} trophies, dossier ${dossier.byteLength} bytes -> ${outputDir}`);
