@@ -3,23 +3,68 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>GTA VI trophy checklist</title>
+<title>Leonida Legend — GTA 6 Trophy Guide &amp; Tracker</title>
+<meta name="description" content="Offline guide and tracker for all 55 PlayStation 5 trophies of Grand Theft Auto VI: cited guides, platinum roadmap, missable flags, saved progress.">
 <link rel="stylesheet" href="style.css">
+<script type="module" src="app.js"></script>
 </head>
 <body>
-<header>
-  <h1>GTA VI trophy checklist</h1>
-  <p id="progress">0 of 55 earned</p>
+<header class="site-header">
+  <div class="sun-art" aria-hidden="true">
+    <div class="neon-sun"></div>
+    <div class="grid-floor"></div>
+  </div>
+  <div class="header-content">
+    <p class="kicker">Grand Theft Auto VI · PlayStation 5 · 100% offline</p>
+    <h1>Leonida Legend</h1>
+    <p class="tagline">All 55 trophies · guides written for this entry with cited sources · a six-stage roadmap to the platinum</p>
+    <div class="progress-block">
+      <p class="progress-text"><span id="earned-count">0 / 55</span> earned · <span id="earned-percent">0%</span> to platinum</p>
+      <div class="progress-track" role="progressbar" aria-label="Trophies earned" aria-valuemin="0" aria-valuemax="55" aria-valuenow="0" id="progress-track">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+      <p class="grade-tally" id="grade-tally"></p>
+    </div>
+  </div>
 </header>
-<div class="controls">
-  <label>Grade <select id="grade"><option value="all">All</option><option value="platinum">Platinum</option><option value="gold">Gold</option><option value="silver">Silver</option><option value="bronze">Bronze</option></select></label>
-  <button id="export" type="button">Export progress</button>
-  <label class="import">Import progress <input id="import" type="file" accept="application/json"></label>
-</div>
-<table>
-  <thead><tr><th>Earned</th><th>Trophy</th><th>Grade</th><th>How to get it</th></tr></thead>
-  <tbody id="rows"></tbody>
-</table>
-<script type="module" src="app.js"></script>
+
+<nav class="toolbar" aria-label="Views and progress tools">
+  <div class="view-tabs" role="tablist" aria-label="View">
+    <button type="button" id="tab-checklist" class="tab" role="tab" aria-selected="true">Checklist</button>
+    <button type="button" id="tab-roadmap" class="tab" role="tab" aria-selected="false">Roadmap</button>
+  </div>
+  <label class="spoiler-switch" title="Hide names and descriptions of unearned story trophies">
+    <input type="checkbox" id="spoiler-toggle" checked>
+    <span class="switch-art" aria-hidden="true"></span>
+    <span>Spoiler guard</span>
+  </label>
+  <div class="io-buttons">
+    <button type="button" id="export-progress">Export progress</button>
+    <label class="import-label" for="import-file">Import progress</label>
+    <input type="file" id="import-file" accept=".json,application/json" hidden>
+    <button type="button" id="reset-progress" class="danger">Reset</button>
+  </div>
+</nav>
+
+<p class="status-line" id="status-line" role="status" aria-live="polite"></p>
+
+<main>
+  <section id="checklist-view" class="view" aria-label="Trophy checklist">
+    <div class="filter-bar" id="filter-bar" role="group" aria-label="Filter trophies"></div>
+    <div class="checklist-layout">
+      <ul class="trophy-list" id="trophy-list"></ul>
+      <aside class="detail-panel" id="detail-panel" aria-label="Trophy guide"></aside>
+    </div>
+  </section>
+  <section id="roadmap-view" class="view" aria-label="Platinum roadmap" hidden>
+    <div id="roadmap-container"></div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <p>Unofficial fan entry for the make.fun GTA 6 trophy guide bounty. Trophy names, descriptions and grades are shown as PlayStation publishes them; every guide is written in our own words and cites its sources beside it. No network requests: progress lives in your browser's localStorage and can be exported to a file and imported back.</p>
+</footer>
+
+<noscript><p class="status-line">This tracker needs JavaScript — it runs entirely in your browser, offline.</p></noscript>
 </body>
 </html>

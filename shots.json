@@ -1,5 +1,6 @@
 [
-  { "file": "1-checklist.jpg", "path": "/", "viewport": { "width": 1280, "height": 800 } },
-  { "file": "2-silver.jpg", "path": "/", "grade": "silver", "viewport": { "width": 1280, "height": 800 } },
-  { "file": "3-bronze.jpg", "path": "/", "grade": "bronze", "scroll": 1400, "viewport": { "width": 1280, "height": 800 } }
+  { "file": "01-checklist-guide.jpg", "path": "/#view=checklist&filter=all&spoilers=off&trophy=the-shootist", "note": "cover: checklist with progress, filters and The Shootist guide + cited sources open", "viewport": { "width": 1280, "height": 800 } },
+  { "file": "02-roadmap.png", "path": "/#view=roadmap&filter=all&spoilers=off", "scroll": 880, "note": "roadmap stage 2 with all three missable flags", "viewport": { "width": 1280, "height": 800 } },
+  { "file": "03-spoiler-guard.png", "path": "/#view=checklist&filter=story&spoilers=on&trophy=vice-city-baby", "note": "spoiler guard on: unearned story trophies masked, grades visible", "viewport": { "width": 1280, "height": 800 } },
+  { "file": "04-missable-guide.jpg", "path": "/#view=checklist&filter=missable&spoilers=off&trophy=hot-together", "note": "missable filter with Hot Together guide and warning banner", "viewport": { "width": 1280, "height": 800 } }
 ]
